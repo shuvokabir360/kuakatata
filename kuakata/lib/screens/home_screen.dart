@@ -1084,7 +1084,7 @@ class _AutoImageSliderState extends State<AutoImageSlider> {
 }
 
 // ==================== FULLSCREEN IMAGE VIEWER WITH ZOOM & DOWNLOAD ====================
-class FullscreenImageViewer extends StatelessWidget {
+class FullscreenImageViewer extends StatefulWidget {
   final String imageUrl;
   final String title;
 
@@ -1093,6 +1093,59 @@ class FullscreenImageViewer extends StatelessWidget {
     required this.imageUrl,
     required this.title,
   }) : super(key: key);
+
+  @override
+  State<FullscreenImageViewer> createState() => _FullscreenImageViewerState();
+}
+
+class _FullscreenImageViewerState extends State<FullscreenImageViewer> {
+  final TransformationController _transformationController = TransformationController();
+  TapDownDetails? _doubleTapDetails;
+
+  void _handleDoubleTap() {
+    if (_transformationController.value != Matrix4.identity()) {
+      _transformationController.value = Matrix4.identity();
+    } else {
+      final position = _doubleTapDetails?.localPosition ?? const Offset(0, 0);
+      _transformationController.value = Matrix4.identity()
+        ..translate(-position.dx * 1.5, -position.dy * 1.5)
+        ..scale(2.5);
+    }
+  }
+
+  void _zoomIn() {
+    final Matrix4 currentMatrix = _transformationController.value;
+    final double currentScale = currentMatrix.getMaxScaleOnAxis();
+    if (currentScale < 4.0) {
+      final double newScale = (currentScale + 0.5).clamp(1.0, 4.0);
+      final Size screenSize = MediaQuery.of(context).size;
+      final double centerX = screenSize.width / 2;
+      final double centerY = screenSize.height / 2;
+      _transformationController.value = Matrix4.identity()
+        ..translate(-centerX * (newScale - 1), -centerY * (newScale - 1))
+        ..scale(newScale);
+    }
+  }
+
+  void _zoomOut() {
+    final Matrix4 currentMatrix = _transformationController.value;
+    final double currentScale = currentMatrix.getMaxScaleOnAxis();
+    if (currentScale > 1.0) {
+      final double newScale = (currentScale - 0.5).clamp(1.0, 4.0);
+      final Size screenSize = MediaQuery.of(context).size;
+      final double centerX = screenSize.width / 2;
+      final double centerY = screenSize.height / 2;
+      _transformationController.value = Matrix4.identity()
+        ..translate(-centerX * (newScale - 1), -centerY * (newScale - 1))
+        ..scale(newScale);
+    }
+  }
+
+  @override
+  void dispose() {
+    _transformationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1104,16 +1157,26 @@ class FullscreenImageViewer extends StatelessWidget {
         backgroundColor: Colors.black,
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
-          title.isNotEmpty ? title : (langProvider.isBangla ? 'ছবি' : 'Image'),
+          widget.title.isNotEmpty ? widget.title : (langProvider.isBangla ? 'ছবি' : 'Image'),
           style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.zoom_in_rounded, color: Colors.white),
+            tooltip: langProvider.isBangla ? 'জুম ইন' : 'Zoom In',
+            onPressed: _zoomIn,
+          ),
+          IconButton(
+            icon: const Icon(Icons.zoom_out_rounded, color: Colors.white),
+            tooltip: langProvider.isBangla ? 'জুম আউট' : 'Zoom Out',
+            onPressed: _zoomOut,
+          ),
           IconButton(
             icon: const Icon(Icons.download_rounded, color: Colors.white),
             tooltip: langProvider.isBangla ? 'ডাউনলোড করুন' : 'Download',
             onPressed: () async {
               try {
-                final uri = Uri.parse(imageUrl);
+                final uri = Uri.parse(widget.imageUrl);
                 if (await canLaunchUrl(uri)) {
                   await launchUrl(uri, mode: LaunchMode.externalApplication);
                   if (context.mounted) {
@@ -1129,7 +1192,7 @@ class FullscreenImageViewer extends StatelessWidget {
                     );
                   }
                 } else {
-                  throw 'Could not launch $imageUrl';
+                  throw 'Could not launch ${widget.imageUrl}';
                 }
               } catch (e) {
                 if (context.mounted) {
@@ -1149,29 +1212,59 @@ class FullscreenImageViewer extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: InteractiveViewer(
-          minScale: 0.5,
-          maxScale: 4.0,
-          child: Hero(
-            tag: imageUrl,
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.contain,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return const Center(
-                  child: CircularProgressIndicator(color: Colors.white),
-                );
-              },
-              errorBuilder: (context, error, stackTrace) {
-                return const Center(
-                  child: Icon(Icons.broken_image_rounded, color: Colors.white30, size: 64),
-                );
-              },
+      body: Stack(
+        children: [
+          Center(
+            child: GestureDetector(
+              onDoubleTapDown: (details) => _doubleTapDetails = details,
+              onDoubleTap: _handleDoubleTap,
+              child: InteractiveViewer(
+                transformationController: _transformationController,
+                minScale: 0.5,
+                maxScale: 4.0,
+                child: Hero(
+                  tag: widget.imageUrl,
+                  child: Image.network(
+                    widget.imageUrl,
+                    fit: BoxFit.contain,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const Center(
+                        child: CircularProgressIndicator(color: Colors.white),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Center(
+                        child: Icon(Icons.broken_image_rounded, color: Colors.white30, size: 64),
+                      );
+                    },
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
+          Positioned(
+            bottom: 30,
+            left: 20,
+            right: 20,
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.black54,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Colors.white24, width: 0.5),
+                ),
+                child: Text(
+                  langProvider.isBangla
+                      ? 'ডাবল ট্যাপ করুন অথবা জুম বাটন ব্যবহার করুন'
+                      : 'Double tap or use zoom buttons',
+                  style: const TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.w500),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
