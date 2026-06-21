@@ -1,6 +1,9 @@
 {
   "name": "kuakata-backend",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "description": "Backend API for Kuakata Travel Guide app",
   "main": "server.js",
   "scripts": {

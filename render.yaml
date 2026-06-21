@@ -1,0 +1,20 @@
+# Render.com Blueprint - Kuakata Backend Deployment
+# This file tells Render how to build and run the backend server.
+# Docs: https://docs.render.com/blueprint-spec
+
+services:
+  - type: web
+    name: kuakata-backend
+    runtime: node
+    region: singapore  # Closest to Bangladesh
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: MONGODB_URI
+        sync: false  # You'll set this manually in Render dashboard
+      - key: PORT
+        value: 10000  # Render's default port for free tier
+      - key: NODE_ENV
+        value: production
