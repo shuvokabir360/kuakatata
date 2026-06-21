@@ -5,14 +5,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // Default base URL. Real Android device connects to host's localhost via adb reverse.
-  static String _baseUrl = 'https://7b3d940472e99c.lhr.life';
+  static String _baseUrl = 'https://1eae8b63e54257.lhr.life';
 
   static String get baseUrl => _baseUrl;
 
   // Initialize and load saved URL
   static Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
-    _baseUrl = prefs.getString('backend_url') ?? 'https://7b3d940472e99c.lhr.life';
+    _baseUrl = prefs.getString('backend_url') ?? 'https://1eae8b63e54257.lhr.life';
   }
 
   // Update backend url setting
