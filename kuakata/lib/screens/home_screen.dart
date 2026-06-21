@@ -14,6 +14,7 @@ import 'board_list_screen.dart';
 import 'boat_list_screen.dart';
 import 'upcoming_screen.dart';
 import 'spot_detail_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // ─── Design Constants (consistent with main.dart) ──────────────────────────
 const _kPrimary     = Color(0xFF1E9CE1);
@@ -1020,18 +1021,36 @@ class _AutoImageSliderState extends State<AutoImageSlider> {
           itemBuilder: (context, index) {
             final slide = _slides[index];
             final imageUrl = (slide['image'] ?? '').toString();
-            return Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color(0xFF1278B8), Color(0xFF1E9CE1)],
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FullscreenImageViewer(
+                      imageUrl: imageUrl,
+                      title: langProvider.isBangla
+                          ? (slide['title_bn'] ?? '').toString()
+                          : (slide['title_en'] ?? '').toString(),
                     ),
                   ),
                 );
               },
+              child: Hero(
+                tag: imageUrl,
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Color(0xFF1278B8), Color(0xFF1E9CE1)],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
             );
           },
         ),
@@ -1063,3 +1082,98 @@ class _AutoImageSliderState extends State<AutoImageSlider> {
     );
   }
 }
+
+// ==================== FULLSCREEN IMAGE VIEWER WITH ZOOM & DOWNLOAD ====================
+class FullscreenImageViewer extends StatelessWidget {
+  final String imageUrl;
+  final String title;
+
+  const FullscreenImageViewer({
+    Key? key,
+    required this.imageUrl,
+    required this.title,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final langProvider = Provider.of<LanguageProvider>(context);
+
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: Text(
+          title.isNotEmpty ? title : (langProvider.isBangla ? 'ছবি' : 'Image'),
+          style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.download_rounded, color: Colors.white),
+            tooltip: langProvider.isBangla ? 'ডাউনলোড করুন' : 'Download',
+            onPressed: () async {
+              try {
+                final uri = Uri.parse(imageUrl);
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          langProvider.isBangla
+                              ? 'ব্রাউজারে ছবি ডাউনলোড হচ্ছে...'
+                              : 'Opening in browser to download image...',
+                        ),
+                        duration: const Duration(seconds: 2),
+                      ),
+                    );
+                  }
+                } else {
+                  throw 'Could not launch $imageUrl';
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        langProvider.isBangla
+                            ? 'ডাউনলোড লিঙ্ক ওপেন করা যায়নি'
+                            : 'Could not open download link',
+                      ),
+                      backgroundColor: Colors.redAccent,
+                    ),
+                  );
+                }
+              }
+            },
+          ),
+        ],
+      ),
+      body: Center(
+        child: InteractiveViewer(
+          minScale: 0.5,
+          maxScale: 4.0,
+          child: Hero(
+            tag: imageUrl,
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.contain,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return const Center(
+                  child: CircularProgressIndicator(color: Colors.white),
+                );
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return const Center(
+                  child: Icon(Icons.broken_image_rounded, color: Colors.white30, size: 64),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+

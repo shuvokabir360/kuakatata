@@ -335,7 +335,9 @@ class ApiService {
 
       if (response.statusCode == 200) {
         final List list = jsonDecode(response.body);
-        final parsed = list.map<Map<String, dynamic>>((e) => Map<String, dynamic>.from(e)).toList();
+        final rawParsed = list.map<Map<String, dynamic>>((e) => Map<String, dynamic>.from(e)).toList();
+        final List<dynamic> processedList = _makeUrlsAbsolute(rawParsed);
+        final parsed = processedList.map((e) => Map<String, dynamic>.from(e)).toList();
         _localContent[type] = parsed;
         return parsed;
       }
@@ -356,7 +358,8 @@ class ApiService {
       ).timeout(const Duration(seconds: 4));
 
       if (response.statusCode == 201 || response.statusCode == 200) {
-        final saved = jsonDecode(response.body) as Map<String, dynamic>;
+        final rawSaved = jsonDecode(response.body) as Map<String, dynamic>;
+        final saved = Map<String, dynamic>.from(_makeUrlsAbsolute(rawSaved));
         _initLocalContent(type);
         _localContent[type]?.add(saved);
         return saved;
@@ -370,8 +373,9 @@ class ApiService {
         ...item,
         'type': type,
       };
-      _localContent[type]?.add(mockSaved);
-      return mockSaved;
+      final processedMockSaved = Map<String, dynamic>.from(_makeUrlsAbsolute(mockSaved));
+      _localContent[type]?.add(processedMockSaved);
+      return processedMockSaved;
     }
   }
 
@@ -384,7 +388,8 @@ class ApiService {
       ).timeout(const Duration(seconds: 4));
 
       if (response.statusCode == 200) {
-        final updated = jsonDecode(response.body) as Map<String, dynamic>;
+        final rawUpdated = jsonDecode(response.body) as Map<String, dynamic>;
+        final updated = Map<String, dynamic>.from(_makeUrlsAbsolute(rawUpdated));
         final type = item['type'] ?? updated['type'];
         if (type != null) {
           _initLocalContent(type);
@@ -412,8 +417,9 @@ class ApiService {
               ...list[index],
               ...item,
             };
-            list[index] = updatedMock;
-            return updatedMock;
+            final processedUpdatedMock = Map<String, dynamic>.from(_makeUrlsAbsolute(updatedMock));
+            list[index] = processedUpdatedMock;
+            return processedUpdatedMock;
           }
         }
       }
@@ -603,6 +609,28 @@ class ApiService {
       debugPrint('Fetch public complaints API error: $e');
       return [];
     }
+  }
+
+  // Convert relative image URLs from database to absolute ones using base URL
+  static dynamic _makeUrlsAbsolute(dynamic data) {
+    if (data is Map) {
+      final Map<String, dynamic> result = {};
+      data.forEach((key, value) {
+        if (value is String && value.startsWith('/')) {
+          result[key.toString()] = '$_baseUrl$value';
+        } else if (value is Map || value is List) {
+          result[key.toString()] = _makeUrlsAbsolute(value);
+        } else {
+          result[key.toString()] = value;
+        }
+      });
+      return result;
+    } else if (data is List) {
+      return data.map((item) => _makeUrlsAbsolute(item)).toList();
+    } else if (data is String && data.startsWith('/')) {
+      return '$_baseUrl$data';
+    }
+    return data;
   }
 }
 
