@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "105167205582",
+    "project_id": "kuakata-fa4c6",
+    "storage_bucket": "kuakata-fa4c6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:105167205582:android:b31b18b01cd2ee935f4c9f",
+        "android_client_info": {
+          "package_name": "com.kuakatauide"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "105167205582-hbb90e8e80kcjupeh2rbd79pjggc7hms.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kuakatauide",
+            "certificate_hash": "53f60fad8ef0fc78fc690eacb154a2a0d83a60fd"
+          }
+        },
+        {
+          "client_id": "105167205582-eb29n26pkf345u2hqg3l17mfg87ffje5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbys8EGs7kvf7angPDgZ-Qd_qfOO5xnrQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "105167205582-eb29n26pkf345u2hqg3l17mfg87ffje5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

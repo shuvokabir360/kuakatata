@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kuakata Travel - Super Admin Panel</title>
+  <!-- Google Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==================== AUTH CONTAINER (LOGIN) ==================== -->
+  <div id="auth-container" class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-logo">
+          <span class="material-icons">explore</span>
+        </div>
+        <h1>Kuakata Travel Guide</h1>
+        <p>Super Admin Panel</p>
+      </div>
+      <div id="auth-error" class="alert alert-danger hidden"></div>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="username">Admin Username</label>
+          <div class="input-wrapper">
+            <span class="material-icons input-icon">person</span>
+            <input type="text" id="username" placeholder="e.g. adminkuakata" required autocomplete="username">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Security Password</label>
+          <div class="input-wrapper">
+            <span class="material-icons input-icon">lock</span>
+            <input type="password" id="password" placeholder="••••••••••••" required autocomplete="current-password">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">
+          <span>Sign In to Dashboard</span>
+          <span class="material-icons">arrow_forward</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN DASHBOARD CONTAINER ==================== -->
+  <div id="dashboard-container" class="dashboard-wrapper hidden">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <span class="material-icons brand-icon">explore</span>
+        <div class="brand-text">
+          <h2>Kuakata Travel</h2>
+          <span>Super Admin</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="#" class="nav-item active" data-target="view-overview">
+              <span class="material-icons">dashboard</span>
+              <span>Overview</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-target="view-hotels">
+              <span class="material-icons">hotel</span>
+              <span>Hotels Directory</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-target="view-managers">
+              <span class="material-icons">people</span>
+              <span>Manager Accounts</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-target="view-complaints">
+              <span class="material-icons">rate_review</span>
+              <span>Reviews & Complaints</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-target="view-spots">
+              <span class="material-icons">landscape</span>
+              <span>Popular Spots</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-target="view-slider">
+              <span class="material-icons">photo_library</span>
+              <span>Home Slider</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-target="view-bikes">
+              <span class="material-icons">motorcycle</span>
+              <span>Bikes Directory</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-target="view-vans">
+              <span class="material-icons">electric_car</span>
+              <span>Vans Directory</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-target="view-boards">
+              <span class="material-icons">directions_boat</span>
+              <span>Speedboats Directory</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-target="view-boats">
+              <span class="material-icons">sailing</span>
+              <span>Boats Directory</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-target="view-foods">
+              <span class="material-icons">restaurant</span>
+              <span>Restaurants & Food</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="btn-logout" class="btn btn-logout">
+          <span class="material-icons">logout</span>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Navbar -->
+      <header class="navbar">
+        <div class="navbar-left">
+          <h1 id="page-title">Dashboard Overview</h1>
+        </div>
+        <div class="navbar-right">
+          <div class="user-badge">
+            <div class="user-avatar">SA</div>
+            <div class="user-info">
+              <span class="user-name">Super Admin</span>
+              <span class="user-role">System Administrator</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content Views -->
+      <div class="view-container">
+        
+        <!-- View: Overview -->
+        <section id="view-overview" class="content-view active">
+          <!-- Stats Grid -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon stat-hotels">
+                <span class="material-icons">hotel</span>
+              </div>
+              <div class="stat-data">
+                <h3 id="stat-count-hotels">0</h3>
+                <p>Total Hotels</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon stat-managers">
+                <span class="material-icons">people</span>
+              </div>
+              <div class="stat-data">
+                <h3 id="stat-count-managers">0</h3>
+                <p>Hotel Managers</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon stat-spots">
+                <span class="material-icons">landscape</span>
+              </div>
+              <div class="stat-data">
+                <h3 id="stat-count-spots">0</h3>
+                <p>Popular Spots</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon stat-complaints">
+                <span class="material-icons">campaign</span>
+              </div>
+              <div class="stat-data">
+                <h3 id="stat-count-complaints">0</h3>
+                <p>Pending Complaints</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="overview-layout">
+            <!-- Latest Reviews -->
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Latest Reviews</h2>
+                <a href="#" class="view-all-link" data-target="view-complaints">View All</a>
+              </div>
+              <div class="panel-body">
+                <div id="overview-reviews-list" class="mini-list">
+                  <p class="loading-text">Loading latest reviews...</p>
+                </div>
+              </div>
+            </div>
+            <!-- Latest Complaints -->
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Recent Complaints</h2>
+                <a href="#" class="view-all-link" data-target="view-complaints">View All</a>
+              </div>
+              <div class="panel-body">
+                <div id="overview-complaints-list" class="mini-list">
+                  <p class="loading-text">Loading recent complaints...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- View: Hotels -->
+        <section id="view-hotels" class="content-view hidden">
+          <div class="action-bar">
+            <h2>Manage Hotels Directory</h2>
+            <button class="btn btn-primary" onclick="openHotelModal()">
+              <span class="material-icons">add</span>
+              <span>Add New Hotel</span>
+            </button>
+          </div>
+          <div class="panel">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Hotel Info</th>
+                    <th>Distance</th>
+                    <th>Price Range</th>
+                    <th>Phone</th>
+                    <th>Rooms Count</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="hotels-table-body">
+                  <!-- Dynamic content -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- View: Managers -->
+        <section id="view-managers" class="content-view hidden">
+          <div class="action-bar">
+            <h2>Hotel Manager Accounts</h2>
+            <button class="btn btn-primary" onclick="openManagerModal()">
+              <span class="material-icons">person_add</span>
+              <span>Create Manager Account</span>
+            </button>
+          </div>
+          <div class="panel">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Manager Name</th>
+                    <th>Mobile</th>
+                    <th>Email</th>
+                    <th>Assigned Hotel</th>
+                    <th>Address</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="managers-table-body">
+                  <!-- Dynamic content -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- View: Reviews & Complaints -->
+        <section id="view-complaints" class="content-view hidden">
+          <!-- Inner Tabs -->
+          <div class="subtabs-bar">
+            <button class="subtab-btn active" data-subtarget="subview-reviews">User Reviews</button>
+            <button class="subtab-btn" data-subtarget="subview-complaints">Complaints Box</button>
+          </div>
+
+          <!-- Subview: Reviews -->
+          <div id="subview-reviews" class="subview-content">
+            <div class="panel">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Rating / Item</th>
+                      <th>User</th>
+                      <th>Comment</th>
+                      <th>Response</th>
+                      <th class="text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reviews-table-body">
+                    <!-- Dynamic content -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subview: Complaints -->
+          <div id="subview-complaints" class="subview-content hidden">
+            <div class="panel">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Status</th>
+                      <th>User Info</th>
+                      <th>Subject / Description</th>
+                      <th>Attachment</th>
+                      <th>Resolution Reply</th>
+                      <th class="text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="complaints-table-body">
+                    <!-- Dynamic content -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- View: Popular Spots -->
+        <section id="view-spots" class="content-view hidden">
+          <div class="action-bar">
+            <h2>Explore & Manage Spots</h2>
+            <button class="btn btn-primary" onclick="openSpotModal()">
+              <span class="material-icons">add_location_alt</span>
+              <span>Add New Spot</span>
+            </button>
+          </div>
+          <div class="panel">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Spot Info</th>
+                    <th>Location</th>
+                    <th>Timings</th>
+                    <th>Description Preview</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="spots-table-body">
+                  <!-- Dynamic content -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- View: Slider -->
+        <section id="view-slider" class="content-view hidden">
+          <div class="action-bar">
+            <h2>Homepage Image Slider</h2>
+            <button class="btn btn-primary" onclick="openSliderModal()">
+              <span class="material-icons">add_photo_alternate</span>
+              <span>Add New Slide</span>
+            </button>
+          </div>
+          <div class="panel">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Slide Image</th>
+                    <th>Title (English)</th>
+                    <th>Title (Bangla)</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="slider-table-body">
+                  <!-- Dynamic content -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- View: Bikes -->
+        <section id="view-bikes" class="content-view hidden">
+          <div class="action-bar">
+            <h2>Manage Bikes Directory</h2>
+            <button class="btn btn-primary" onclick="openBikeModal()">
+              <span class="material-icons">add</span>
+              <span>Add New Biker</span>
+            </button>
+          </div>
+          <div class="panel">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Biker / Image</th>
+                    <th>Bike Model</th>
+                    <th>Rental Price</th>
+                    <th>Phone</th>
+                    <th>Rating / Rides</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="bikes-table-body">
+                  <!-- Dynamic content -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- View: Vans -->
+        <section id="view-vans" class="content-view hidden">
+          <div class="action-bar">
+            <h2>Manage Vans Directory</h2>
+            <button class="btn btn-primary" onclick="openVanModal()">
+              <span class="material-icons">add</span>
+              <span>Add New Van</span>
+            </button>
+          </div>
+          <div class="panel">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Driver / Image</th>
+                    <th>Van Details</th>
+                    <th>Rental Price</th>
+                    <th>Phone</th>
+                    <th>Rating / Trips</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="vans-table-body">
+                  <!-- Dynamic content -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- View: Speedboats -->
+        <section id="view-boards" class="content-view hidden">
+          <div class="action-bar">
+            <h2>Manage Speedboats Directory</h2>
+            <button class="btn btn-primary" onclick="openBoardModal()">
+              <span class="material-icons">add</span>
+              <span>Add New Speedboat</span>
+            </button>
+          </div>
+          <div class="panel">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Driver / Image</th>
+                    <th>Boat details</th>
+                    <th>Rental Price</th>
+                    <th>Phone</th>
+                    <th>Rating / Trips</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="boards-table-body">
+                  <!-- Dynamic content -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- View: Boats -->
+        <section id="view-boats" class="content-view hidden">
+          <div class="action-bar">
+            <h2>Manage Boats Directory</h2>
+            <button class="btn btn-primary" onclick="openBoatModal()">
+              <span class="material-icons">add</span>
+              <span>Add New Boatman</span>
+            </button>
+          </div>
+          <div class="panel">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Boatman / Image</th>
+                    <th>Boat details</th>
+                    <th>Rental Price</th>
+                    <th>Phone</th>
+                    <th>Rating / Trips</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="boats-table-body">
+                  <!-- Dynamic content -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- View: Restaurants & Food -->
+        <section id="view-foods" class="content-view hidden">
+          <div class="action-bar">
+            <h2>Manage Restaurants Directory</h2>
+            <button class="btn btn-primary" onclick="openFoodModal()">
+              <span class="material-icons">add</span>
+              <span>Add Restaurant</span>
+            </button>
+          </div>
+          <div class="panel">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Restaurant / Image</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Menu Type</th>
+                    <th>Menu Items</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="foods-table-body">
+                  <!-- Dynamic content -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== MODALS CONTAINER ==================== -->
+
+  <!-- Modal: Hotel Add/Edit -->
+  <div id="modal-hotel" class="modal-wrapper hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="hotel-modal-title">Add New Hotel</h3>
+        <button class="close-btn" onclick="closeModal('modal-hotel')">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <form id="hotel-form">
+        <input type="hidden" id="hotel-id">
+        <div class="modal-body scrollable-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="hotel-name-en">Hotel Name (English) *</label>
+              <input type="text" id="hotel-name-en" required placeholder="e.g. Kuakata Grand Hotel">
+            </div>
+            <div class="form-group">
+              <label for="hotel-name-bn">Hotel Name (Bangla) *</label>
+              <input type="text" id="hotel-name-bn" required placeholder="e.g. কুয়াকাটা গ্র্যান্ড হোটেল">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="hotel-distance-en">Distance (English) *</label>
+              <input type="text" id="hotel-distance-en" required placeholder="e.g. 150m from Beach">
+            </div>
+            <div class="form-group">
+              <label for="hotel-distance-bn">Distance (Bangla) *</label>
+              <input type="text" id="hotel-distance-bn" required placeholder="e.g. সৈকত থেকে ১৫০ মিটার">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="hotel-price-range">Price Range *</label>
+              <input type="text" id="hotel-price-range" required placeholder="e.g. ৳3,500 - ৳8,000">
+            </div>
+            <div class="form-group">
+              <label for="hotel-phone">Phone Number *</label>
+              <input type="text" id="hotel-phone" required placeholder="e.g. 01711223344">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Cover Image (Upload file or paste URL)</label>
+            <div class="image-upload-wrapper">
+              <input type="file" id="hotel-image-file" accept="image/*" class="file-input">
+              <input type="text" id="hotel-image-url" placeholder="or paste image URL directly">
+            </div>
+            <div id="hotel-image-preview" class="image-preview hidden"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="hotel-desc-en">Description (English)</label>
+              <textarea id="hotel-desc-en" rows="3" placeholder="Write description in English..."></textarea>
+            </div>
+            <div class="form-group">
+              <label for="hotel-desc-bn">Description (Bangla)</label>
+              <textarea id="hotel-desc-bn" rows="3" placeholder="Write description in Bangla..."></textarea>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="hotel-tags-en">Tags English (Comma separated)</label>
+              <input type="text" id="hotel-tags-en" placeholder="Pool, AC, Free Wi-Fi, Beach View">
+            </div>
+            <div class="form-group">
+              <label for="hotel-tags-bn">Tags Bangla (Comma separated)</label>
+              <input type="text" id="hotel-tags-bn" placeholder="সুইমিং পুল, এসি, ফ্রি ওয়াই-ফাই">
+            </div>
+          </div>
+
+          <!-- Room Management Section -->
+          <div class="room-section">
+            <div class="room-section-header">
+              <h3>Room Types & Pricing</h3>
+              <button type="button" class="btn btn-outline btn-small" onclick="addRoomRow()">
+                <span class="material-icons">add</span> Add Room Type
+              </button>
+            </div>
+            <div id="rooms-rows-container">
+              <!-- Dynamically populated room rows -->
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-hotel')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Hotel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Manager Add/Edit -->
+  <div id="modal-manager" class="modal-wrapper hidden">
+    <div class="modal-card modal-card-small">
+      <div class="modal-header">
+        <h3>Create Hotel Manager Account</h3>
+        <button class="close-btn" onclick="closeModal('modal-manager')">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <form id="manager-form">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="mgr-name">Manager Name *</label>
+            <input type="text" id="mgr-name" required placeholder="e.g. John Doe">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="mgr-mobile">Mobile Number *</label>
+              <input type="text" id="mgr-mobile" required placeholder="e.g. 01711000000">
+            </div>
+            <div class="form-group">
+              <label for="mgr-pin">6-Digit Access PIN *</label>
+              <input type="password" id="mgr-pin" required maxlength="6" placeholder="e.g. 123456">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="mgr-email">Email Address (Optional)</label>
+            <input type="email" id="mgr-email" placeholder="e.g. manager@hotels.com">
+          </div>
+          <div class="form-group">
+            <label for="mgr-address">Address *</label>
+            <input type="text" id="mgr-address" required placeholder="e.g. Kuakata, Patuakhali">
+          </div>
+          <div class="form-group">
+            <label for="mgr-hotel">Assign Hotel *</label>
+            <select id="mgr-hotel" required>
+              <!-- Options loaded dynamically -->
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-manager')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Reply to Review -->
+  <div id="modal-review-reply" class="modal-wrapper hidden">
+    <div class="modal-card modal-card-small">
+      <div class="modal-header">
+        <h3>Reply to Review</h3>
+        <button class="close-btn" onclick="closeModal('modal-review-reply')">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <form id="review-reply-form">
+        <input type="hidden" id="reply-review-id">
+        <div class="modal-body">
+          <div class="review-details">
+            <p><strong>User:</strong> <span id="reply-review-user">Name</span></p>
+            <p><strong>Rating:</strong> <span id="reply-review-stars">★ ★ ★ ★ ★</span></p>
+            <p class="review-comment-block" id="reply-review-comment">"This is the comment..."</p>
+          </div>
+          <div class="form-group">
+            <label for="review-reply-text">Admin Reply Response *</label>
+            <textarea id="review-reply-text" rows="4" required placeholder="Thank you for sharing your feedback..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-review-reply')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Submit Response</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Reply to Complaint -->
+  <div id="modal-complaint-reply" class="modal-wrapper hidden">
+    <div class="modal-card modal-card-small">
+      <div class="modal-header">
+        <h3>Resolve Complaint</h3>
+        <button class="close-btn" onclick="closeModal('modal-complaint-reply')">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <form id="complaint-reply-form">
+        <input type="hidden" id="reply-complaint-id">
+        <div class="modal-body">
+          <div class="complaint-details">
+            <p><strong>From:</strong> <span id="reply-complaint-user">Name</span> (<span id="reply-complaint-mobile">Mobile</span>)</p>
+            <p><strong>Subject:</strong> <span id="reply-complaint-subject">Subject</span></p>
+            <p class="complaint-desc-block" id="reply-complaint-desc">"This is the description..."</p>
+          </div>
+          <div class="form-group">
+            <label for="complaint-reply-text">Resolution Response / Action Taken *</label>
+            <textarea id="complaint-reply-text" rows="4" required placeholder="Provide resolution details or actions taken..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="complaint-status">Update Status</label>
+            <select id="complaint-status">
+              <option value="Pending">Pending</option>
+              <option value="Under Investigation">Under Investigation</option>
+              <option value="Resolved">Resolved</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-complaint-reply')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save & Respond</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Spot Add/Edit -->
+  <div id="modal-spot" class="modal-wrapper hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="spot-modal-title">Add Popular Spot</h3>
+        <button class="close-btn" onclick="closeModal('modal-spot')">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <form id="spot-form">
+        <input type="hidden" id="spot-id">
+        <div class="modal-body scrollable-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="spot-title-en">Spot Title (English) *</label>
+              <input type="text" id="spot-title-en" required placeholder="e.g. Red Crab Beach">
+            </div>
+            <div class="form-group">
+              <label for="spot-title-bn">Spot Title (Bangla) *</label>
+              <input type="text" id="spot-title-bn" required placeholder="e.g. লাল কাঁকড়ার চর">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="spot-desc-en">Short Description (English) *</label>
+              <input type="text" id="spot-desc-en" required placeholder="e.g. A serene beach sanctuary...">
+            </div>
+            <div class="form-group">
+              <label for="spot-desc-bn">Short Description (Bangla) *</label>
+              <input type="text" id="spot-desc-bn" required placeholder="e.g. একটি শান্ত সৈকত যেখানে...">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Spot Image (Upload file or paste URL)</label>
+            <div class="image-upload-wrapper">
+              <input type="file" id="spot-image-file" accept="image/*" class="file-input">
+              <input type="text" id="spot-image-url" placeholder="or paste image URL directly">
+            </div>
+            <div id="spot-image-preview" class="image-preview hidden"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="spot-location-en">Location Address (English)</label>
+              <input type="text" id="spot-location-en" placeholder="e.g. Near Jhau Forest, Patuakhali">
+            </div>
+            <div class="form-group">
+              <label for="spot-location-bn">Location Address (Bangla)</label>
+              <input type="text" id="spot-location-bn" placeholder="e.g. ঝাউবনের নিকটে, কুয়াকাটা">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="spot-timings-en">Timings (English)</label>
+              <input type="text" id="spot-timings-en" placeholder="e.g. Open 24 Hours">
+            </div>
+            <div class="form-group">
+              <label for="spot-timings-bn">Timings (Bangla)</label>
+              <input type="text" id="spot-timings-bn" placeholder="e.g. ২৪ ঘণ্টা খোলা">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="spot-about-en">Full About Details (English)</label>
+              <textarea id="spot-about-en" rows="3" placeholder="Detailed history, facts, descriptions in English..."></textarea>
+            </div>
+            <div class="form-group">
+              <label for="spot-about-bn">Full About Details (Bangla)</label>
+              <textarea id="spot-about-bn" rows="3" placeholder="Detailed history, facts, descriptions in Bangla..."></textarea>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="spot-tips-en">Travel Tips (English - bullet points)</label>
+              <textarea id="spot-tips-en" rows="3" placeholder="• Best time to visit is...&#10;• Do not litter on the beach."></textarea>
+            </div>
+            <div class="form-group">
+              <label for="spot-tips-bn">Travel Tips (Bangla - bullet points)</label>
+              <textarea id="spot-tips-bn" rows="3" placeholder="• সূর্যোদয়ের সবচেয়ে ভালো সময়...&#10;• আবর্জনা ফেলা থেকে বিরত থাকুন।"></textarea>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="spot-trans-en">Transport Guide (English)</label>
+              <input type="text" id="spot-trans-en" placeholder="e.g. Walking distance or local van.">
+            </div>
+            <div class="form-group">
+              <label for="spot-trans-bn">Transport Guide (Bangla)</label>
+              <input type="text" id="spot-trans-bn" placeholder="e.g. হেঁটে অথবা ভ্যানে যাওয়া যায়।">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-spot')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Spot</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Slider Add/Edit -->
+  <div id="modal-slider" class="modal-wrapper hidden">
+    <div class="modal-card modal-card-small">
+      <div class="modal-header">
+        <h3 id="slider-modal-title">Add Home Slide</h3>
+        <button class="close-btn" onclick="closeModal('modal-slider')">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <form id="slider-form">
+        <input type="hidden" id="slider-id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="slide-title-en">Slide Title (English) *</label>
+            <input type="text" id="slide-title-en" required placeholder="e.g. Sunset at Kuakata Beach">
+          </div>
+          <div class="form-group">
+            <label for="slide-title-bn">Slide Title (Bangla) *</label>
+            <input type="text" id="slide-title-bn" required placeholder="e.g. কুয়াকাটা সৈকতে মনোরম সূর্যাস্ত">
+          </div>
+          <div class="form-group">
+            <label>Slide Image (Upload file or paste URL)</label>
+            <div class="image-upload-wrapper">
+              <input type="file" id="slide-image-file" accept="image/*" class="file-input">
+              <input type="text" id="slide-image-url" placeholder="or paste image URL directly">
+            </div>
+            <div id="slide-image-preview" class="image-preview hidden"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-slider')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Slide</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Bike Add/Edit -->
+  <div id="modal-bike" class="modal-wrapper hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="bike-modal-title">Add New Biker</h3>
+        <button class="close-btn" onclick="closeModal('modal-bike')">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <form id="bike-form">
+        <input type="hidden" id="bike-id">
+        <div class="modal-body scrollable-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bike-name-en">Biker Name (English) *</label>
+              <input type="text" id="bike-name-en" required placeholder="e.g. Rahat Hasan">
+            </div>
+            <div class="form-group">
+              <label for="bike-name-bn">Biker Name (Bangla) *</label>
+              <input type="text" id="bike-name-bn" required placeholder="e.g. রাহাত হাসান">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bike-model-en">Bike Model (English) *</label>
+              <input type="text" id="bike-model-en" required placeholder="e.g. Yamaha FZ-S v3 (150cc)">
+            </div>
+            <div class="form-group">
+              <label for="bike-model-bn">Bike Model (Bangla) *</label>
+              <input type="text" id="bike-model-bn" required placeholder="e.g. ইয়ামাহা এফজেড-এস ভার্সন ৩">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bike-price-en">Rental Price (English) *</label>
+              <input type="text" id="bike-price-en" required placeholder="e.g. ৳1,000 / day">
+            </div>
+            <div class="form-group">
+              <label for="bike-price-bn">Rental Price (Bangla) *</label>
+              <input type="text" id="bike-price-bn" required placeholder="e.g. ৳১,০০০ / দিন">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bike-rating">Rating *</label>
+              <input type="number" step="0.1" min="1" max="5" id="bike-rating" required placeholder="e.g. 4.9" value="4.8">
+            </div>
+            <div class="form-group">
+              <label for="bike-rides">Total Rides *</label>
+              <input type="number" id="bike-rides" required placeholder="e.g. 100" value="100">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="bike-phone">Phone Number *</label>
+            <input type="text" id="bike-phone" required placeholder="e.g. 01744556677">
+          </div>
+          <div class="form-group">
+            <label>Profile Image (Upload or paste URL)</label>
+            <div class="image-upload-wrapper">
+              <input type="file" id="bike-image-file" accept="image/*" class="file-input">
+              <input type="text" id="bike-image-url" placeholder="or paste image URL directly">
+            </div>
+            <div id="bike-image-preview" class="image-preview hidden"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bike-exp-en">Experience/Details (English)</label>
+              <input type="text" id="bike-exp-en" placeholder="e.g. 3+ years experience. English speaking.">
+            </div>
+            <div class="form-group">
+              <label for="bike-exp-bn">Experience/Details (Bangla)</label>
+              <input type="text" id="bike-exp-bn" placeholder="e.g. ৩+ বছরের অভিজ্ঞতা। চমৎকার গাইড।">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-bike')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Biker</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Van Add/Edit -->
+  <div id="modal-van" class="modal-wrapper hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="van-modal-title">Add New Van</h3>
+        <button class="close-btn" onclick="closeModal('modal-van')">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <form id="van-form">
+        <input type="hidden" id="van-id">
+        <div class="modal-body scrollable-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="van-name-en">Driver Name (English) *</label>
+              <input type="text" id="van-name-en" required placeholder="e.g. Abul Kalam">
+            </div>
+            <div class="form-group">
+              <label for="van-name-bn">Driver Name (Bangla) *</label>
+              <input type="text" id="van-name-bn" required placeholder="e.g. আবুল কালাম">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="van-model-en">Van Details (English) *</label>
+              <input type="text" id="van-model-en" required placeholder="e.g. Electric Easy Van (6 Seats)">
+            </div>
+            <div class="form-group">
+              <label for="van-model-bn">Van Details (Bangla) *</label>
+              <input type="text" id="van-model-bn" required placeholder="e.g. ইলেকট্রিক ইজি ভ্যান (৬ সিট)">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="van-price-en">Rental Price (English) *</label>
+              <input type="text" id="van-price-en" required placeholder="e.g. ৳150 / hour">
+            </div>
+            <div class="form-group">
+              <label for="van-price-bn">Rental Price (Bangla) *</label>
+              <input type="text" id="van-price-bn" required placeholder="e.g. ৳১৫০ / ঘণ্টা">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="van-rating">Rating *</label>
+              <input type="number" step="0.1" min="1" max="5" id="van-rating" required placeholder="e.g. 4.7" value="4.7">
+            </div>
+            <div class="form-group">
+              <label for="van-trips">Total Trips *</label>
+              <input type="number" id="van-trips" required placeholder="e.g. 100" value="100">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="van-phone">Phone Number *</label>
+            <input type="text" id="van-phone" required placeholder="e.g. 01811223344">
+          </div>
+          <div class="form-group">
+            <label>Van Image (Upload or paste URL)</label>
+            <div class="image-upload-wrapper">
+              <input type="file" id="van-image-file" accept="image/*" class="file-input">
+              <input type="text" id="van-image-url" placeholder="or paste image URL directly">
+            </div>
+            <div id="van-image-preview" class="image-preview hidden"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="van-details-en">Details (English)</label>
+              <input type="text" id="van-details-en" placeholder="e.g. Friendly local guide. Eco-friendly transit.">
+            </div>
+            <div class="form-group">
+              <label for="van-details-bn">Details (Bangla)</label>
+              <input type="text" id="van-details-bn" placeholder="e.g. বন্ধুত্বপূর্ণ আচরণ। পরিবেশবান্ধব গাড়ি।">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-van')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Van</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Speedboat Add/Edit -->
+  <div id="modal-board" class="modal-wrapper hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="board-modal-title">Add New Speedboat</h3>
+        <button class="close-btn" onclick="closeModal('modal-board')">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <form id="board-form">
+        <input type="hidden" id="board-id">
+        <div class="modal-body scrollable-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="board-name-en">Driver Name (English) *</label>
+              <input type="text" id="board-name-en" required placeholder="e.g. Milon Hossain">
+            </div>
+            <div class="form-group">
+              <label for="board-name-bn">Driver Name (Bangla) *</label>
+              <input type="text" id="board-name-bn" required placeholder="e.g. মিলন হোসাইন">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="board-model-en">Boat Details (English) *</label>
+              <input type="text" id="board-model-en" required placeholder="e.g. Yamaha Outboard (40 HP)">
+            </div>
+            <div class="form-group">
+              <label for="board-model-bn">Boat Details (Bangla) *</label>
+              <input type="text" id="board-model-bn" required placeholder="e.g. ইয়ামাহা আউটবোর্ড (৪০ হর্সপাওয়ার)">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="board-price-en">Rental Price (English) *</label>
+              <input type="text" id="board-price-en" required placeholder="e.g. ৳1,500 / trip">
+            </div>
+            <div class="form-group">
+              <label for="board-price-bn">Rental Price (Bangla) *</label>
+              <input type="text" id="board-price-bn" required placeholder="e.g. ৳১,৫০০ / ট্রিপ">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="board-rating">Rating *</label>
+              <input type="number" step="0.1" min="1" max="5" id="board-rating" required placeholder="e.g. 4.9" value="4.9">
+            </div>
+            <div class="form-group">
+              <label for="board-trips">Total Trips *</label>
+              <input type="number" id="board-trips" required placeholder="e.g. 100" value="100">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="board-phone">Phone Number *</label>
+            <input type="text" id="board-phone" required placeholder="e.g. 01911223344">
+          </div>
+          <div class="form-group">
+            <label>Speedboat Image (Upload or paste URL)</label>
+            <div class="image-upload-wrapper">
+              <input type="file" id="board-image-file" accept="image/*" class="file-input">
+              <input type="text" id="board-image-url" placeholder="or paste image URL directly">
+            </div>
+            <div id="board-image-preview" class="image-preview hidden"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="board-details-en">Details (English)</label>
+              <input type="text" id="board-details-en" placeholder="e.g. Certified life-guard driver. Safe ride.">
+            </div>
+            <div class="form-group">
+              <label for="board-details-bn">Details (Bangla)</label>
+              <input type="text" id="board-details-bn" placeholder="e.g. সার্টিফাইড লাইফ-গার্ড চালক। নিরাপদ রাইড।">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-board')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Speedboat</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Boat Add/Edit -->
+  <div id="modal-boat" class="modal-wrapper hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="boat-modal-title">Add New Boatman</h3>
+        <button class="close-btn" onclick="closeModal('modal-boat')">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <form id="boat-form">
+        <input type="hidden" id="boat-id">
+        <div class="modal-body scrollable-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="boat-name-en">Boatman Name (English) *</label>
+              <input type="text" id="boat-name-en" required placeholder="e.g. Kalam Majhi">
+            </div>
+            <div class="form-group">
+              <label for="boat-name-bn">Boatman Name (Bangla) *</label>
+              <input type="text" id="boat-name-bn" required placeholder="e.g. কালাম মাঝি">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="boat-model-en">Boat Details (English) *</label>
+              <input type="text" id="boat-model-en" required placeholder="e.g. Traditional Wooden Engine Boat (12 Seats)">
+            </div>
+            <div class="form-group">
+              <label for="boat-model-bn">Boat Details (Bangla) *</label>
+              <input type="text" id="boat-model-bn" required placeholder="e.g. ঐতিহ্যবাহী কাঠের ইঞ্জিন চালিত নৌকা (১২ সিট)">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="boat-price-en">Rental Price (English) *</label>
+              <input type="text" id="boat-price-en" required placeholder="e.g. ৳800 / hour">
+            </div>
+            <div class="form-group">
+              <label for="boat-price-bn">Rental Price (Bangla) *</label>
+              <input type="text" id="boat-price-bn" required placeholder="e.g. ৳৮০০ / ঘণ্টা">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="boat-rating">Rating *</label>
+              <input type="number" step="0.1" min="1" max="5" id="boat-rating" required placeholder="e.g. 4.7" value="4.7">
+            </div>
+            <div class="form-group">
+              <label for="boat-trips">Total Trips *</label>
+              <input type="number" id="boat-trips" required placeholder="e.g. 100" value="100">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="boat-phone">Phone Number *</label>
+            <input type="text" id="boat-phone" required placeholder="e.g. 01511223344">
+          </div>
+          <div class="form-group">
+            <label>Boat Image (Upload or paste URL)</label>
+            <div class="image-upload-wrapper">
+              <input type="file" id="boat-image-file" accept="image/*" class="file-input">
+              <input type="text" id="boat-image-url" placeholder="or paste image URL directly">
+            </div>
+            <div id="boat-image-preview" class="image-preview hidden"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="boat-details-en">Details (English)</label>
+              <input type="text" id="boat-details-en" placeholder="e.g. 30+ years experience sailing.">
+            </div>
+            <div class="form-group">
+              <label for="boat-details-bn">Details (Bangla)</label>
+              <input type="text" id="boat-details-bn" placeholder="e.g. ৩০+ বছরের নৌযান চালনার অভিজ্ঞতা।">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-boat')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Boatman</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Restaurant Food Add/Edit -->
+  <div id="modal-food" class="modal-wrapper hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="food-modal-title">Add Restaurant</h3>
+        <button class="close-btn" onclick="closeModal('modal-food')">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <form id="food-form">
+        <input type="hidden" id="food-id">
+        <div class="modal-body scrollable-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="food-name-en">Restaurant Name (English) *</label>
+              <input type="text" id="food-name-en" required placeholder="e.g. Shura Restaurant & BBQ Stalls">
+            </div>
+            <div class="form-group">
+              <label for="food-name-bn">Restaurant Name (Bangla) *</label>
+              <input type="text" id="food-name-bn" required placeholder="e.g. সুরা রেস্টুরেন্ট এন্ড বারবিকিউ">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="food-address">Address *</label>
+              <input type="text" id="food-address" required placeholder="e.g. Beach Road, Kuakata">
+            </div>
+            <div class="form-group">
+              <label for="food-phone">Phone Number</label>
+              <input type="text" id="food-phone" placeholder="e.g. 01711223344">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Cover Image (Upload or paste URL)</label>
+            <div class="image-upload-wrapper">
+              <input type="file" id="food-image-file" accept="image/*" class="file-input">
+              <input type="text" id="food-image-url" placeholder="or paste image URL directly">
+            </div>
+            <div id="food-image-preview" class="image-preview hidden"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="food-menu-type">Menu Display Type *</label>
+              <select id="food-menu-type" required>
+                <option value="list">Detailed Food List (Standard)</option>
+                <option value="image">Show Single Menu Card Image</option>
+              </select>
+            </div>
+            <div class="form-group" id="menu-image-group">
+              <label>Menu Card Image (Upload or paste URL)</label>
+              <div class="image-upload-wrapper">
+                <input type="file" id="food-menu-image-file" accept="image/*" class="file-input">
+                <input type="text" id="food-menu-image-url" placeholder="or paste image URL directly">
+              </div>
+              <div id="food-menu-image-preview" class="image-preview hidden"></div>
+            </div>
+          </div>
+
+          <!-- Restaurant Dishes Management -->
+          <div class="room-section" id="dishes-section">
+            <div class="room-section-header">
+              <h3>Food Menu Items (Dishes)</h3>
+              <button type="button" class="btn btn-outline btn-small" onclick="addDishRow()">
+                <span class="material-icons">add</span> Add Dish Item
+              </button>
+            </div>
+            <div id="dishes-rows-container">
+              <!-- Dynamically populated dish rows -->
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-food')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Restaurant</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Preview image full size modal -->
+  <div id="modal-image-preview" class="modal-wrapper hidden preview-modal" onclick="closeModal('modal-image-preview')">
+    <div class="preview-modal-content" onclick="event.stopPropagation()">
+      <img id="full-image-preview-element" src="" alt="Preview">
+      <button class="close-btn preview-close" onclick="closeModal('modal-image-preview')">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- JS Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>

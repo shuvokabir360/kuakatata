@@ -1,0 +1,17 @@
+# Ignore local backend files
+backend/node_modules/
+backend/uploads/
+backend/.env
+
+# Ignore Flutter build and cache files
+kuakata/.dart_tool/
+kuakata/build/
+kuakata/.flutter-plugins
+kuakata/.flutter-plugins-dependencies
+kuakata/android/key.properties
+kuakata/android/.gradle/
+kuakata/android/app/local.properties
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
