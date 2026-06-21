@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,6 +22,7 @@ class _FoodScreenState extends State<FoodScreen> {
   final Map<String, int> _cart = {};
   List<Map<String, dynamic>> _dishes = [];
   bool _isLoading = true;
+  Timer? _refreshTimer;
 
   Future<void> _pickAndUploadImage(TextEditingController controller, BuildContext context, Function setModalState) async {
     final picker = ImagePicker();
@@ -149,6 +151,31 @@ class _FoodScreenState extends State<FoodScreen> {
   void initState() {
     super.initState();
     _loadDishes();
+    // Refresh food list silently in the background every 10 seconds
+    _refreshTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      if (mounted && !_isLoading) {
+        _loadDishesBackground();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _loadDishesBackground() async {
+    try {
+      final data = await ApiService.fetchContent('food');
+      if (mounted) {
+        setState(() {
+          _dishes = data;
+        });
+      }
+    } catch (e) {
+      debugPrint('Background error loading food: $e');
+    }
   }
 
   Future<void> _loadDishes() async {

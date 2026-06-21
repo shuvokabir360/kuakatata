@@ -174,12 +174,60 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  late Future<List<Map<String, dynamic>>> _spotsFuture;
+  List<Map<String, dynamic>> _spots = [];
+  bool _isLoadingSpots = true;
+  Timer? _refreshTimer;
 
   @override
   void initState() {
     super.initState();
-    _spotsFuture = ApiService.fetchContent('spot');
+    _loadSpots();
+    // Refresh spots in background silently every 10 seconds
+    _refreshTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      _loadSpotsBackground();
+    });
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _loadSpots() async {
+    if (!mounted) return;
+    setState(() {
+      _isLoadingSpots = true;
+    });
+    try {
+      final data = await ApiService.fetchContent('spot');
+      if (mounted) {
+        setState(() {
+          _spots = data;
+          _isLoadingSpots = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error loading spots: $e');
+      if (mounted) {
+        setState(() {
+          _isLoadingSpots = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _loadSpotsBackground() async {
+    try {
+      final data = await ApiService.fetchContent('spot');
+      if (mounted) {
+        setState(() {
+          _spots = data;
+        });
+      }
+    } catch (e) {
+      debugPrint('Background error loading spots: $e');
+    }
   }
 
   @override
@@ -251,11 +299,7 @@ class _HomeTabState extends State<HomeTab> {
 
     return RefreshIndicator(
       color: _kPrimary,
-      onRefresh: () async {
-        setState(() {
-          _spotsFuture = ApiService.fetchContent('spot');
-        });
-      },
+      onRefresh: _loadSpots,
       child: CustomScrollView(
         slivers: [
           // ─── Hero Banner ─────────────────────────────────────────────
@@ -584,15 +628,14 @@ class _HomeTabState extends State<HomeTab> {
           SliverToBoxAdapter(
             child: SizedBox(
               height: 210,
-              child: FutureBuilder<List<Map<String, dynamic>>>(
-                future: _spotsFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
+              child: Builder(
+                builder: (context) {
+                  if (_isLoadingSpots) {
                     return const Center(
                       child: CircularProgressIndicator(color: _kPrimary, strokeWidth: 2.5),
                     );
                   }
-                  if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+                  if (_spots.isEmpty) {
                     return Center(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -611,7 +654,7 @@ class _HomeTabState extends State<HomeTab> {
                       ),
                     );
                   }
-                  final spots = snapshot.data!;
+                  final spots = _spots;
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.only(left: 16, right: 4),
@@ -955,6 +998,8 @@ class _AutoImageSliderState extends State<AutoImageSlider> {
 
   List<Map<String, dynamic>> _slides = [];
 
+  Timer? _slidesFetchTimer;
+
   @override
   void initState() {
     super.initState();
@@ -962,6 +1007,10 @@ class _AutoImageSliderState extends State<AutoImageSlider> {
     _pageController = PageController(initialPage: 0);
     _fetchSlides();
     _startTimer();
+    // Refresh slides in background silently every 10 seconds
+    _slidesFetchTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      _fetchSlides();
+    });
   }
 
   Future<void> _fetchSlides() async {
@@ -993,6 +1042,7 @@ class _AutoImageSliderState extends State<AutoImageSlider> {
   @override
   void dispose() {
     _sliderTimer?.cancel();
+    _slidesFetchTimer?.cancel();
     _pageController.dispose();
     super.dispose();
   }

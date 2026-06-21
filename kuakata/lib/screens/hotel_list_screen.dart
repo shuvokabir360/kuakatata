@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -231,10 +232,37 @@ class _HotelListScreenState extends State<HotelListScreen> {
     }
   }
 
+  Timer? _refreshTimer;
+
   @override
   void initState() {
     super.initState();
     _loadHotels();
+    // Refresh hotels silently in the background every 10 seconds
+    _refreshTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      if (mounted && !_isLoading) {
+        _loadHotelsBackground();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _loadHotelsBackground() async {
+    try {
+      final data = await ApiService.fetchContent('hotel');
+      if (mounted) {
+        setState(() {
+          _hotels = data;
+        });
+      }
+    } catch (e) {
+      debugPrint('Background error loading hotels: $e');
+    }
   }
 
   Future<void> _loadHotels() async {

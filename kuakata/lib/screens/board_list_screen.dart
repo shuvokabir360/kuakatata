@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,6 +20,7 @@ class BoardListScreen extends StatefulWidget {
 class _BoardListScreenState extends State<BoardListScreen> {
   List<Map<String, dynamic>> _drivers = [];
   bool _isLoading = true;
+  Timer? _refreshTimer;
 
   Future<void> _pickAndUploadImage(TextEditingController controller, BuildContext context, Function setModalState) async {
     final picker = ImagePicker();
@@ -127,6 +129,31 @@ class _BoardListScreenState extends State<BoardListScreen> {
   void initState() {
     super.initState();
     _loadDrivers();
+    // Refresh speedboat drivers silently in the background every 10 seconds
+    _refreshTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      if (mounted && !_isLoading) {
+        _loadDriversBackground();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _loadDriversBackground() async {
+    try {
+      final data = await ApiService.fetchContent('board');
+      if (mounted) {
+        setState(() {
+          _drivers = data;
+        });
+      }
+    } catch (e) {
+      debugPrint('Background error loading speedboards: $e');
+    }
   }
 
   Future<void> _loadDrivers() async {

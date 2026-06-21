@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,6 +20,7 @@ class VanListScreen extends StatefulWidget {
 class _VanListScreenState extends State<VanListScreen> {
   List<Map<String, dynamic>> _vans = [];
   bool _isLoading = true;
+  Timer? _refreshTimer;
 
   Future<void> _pickAndUploadImage(TextEditingController controller, BuildContext context, Function setModalState) async {
     final picker = ImagePicker();
@@ -127,6 +129,31 @@ class _VanListScreenState extends State<VanListScreen> {
   void initState() {
     super.initState();
     _loadVans();
+    // Refresh vans silently in the background every 10 seconds
+    _refreshTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      if (mounted && !_isLoading) {
+        _loadVansBackground();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _loadVansBackground() async {
+    try {
+      final data = await ApiService.fetchContent('van');
+      if (mounted) {
+        setState(() {
+          _vans = data;
+        });
+      }
+    } catch (e) {
+      debugPrint('Background error loading vans: $e');
+    }
   }
 
   Future<void> _loadVans() async {
