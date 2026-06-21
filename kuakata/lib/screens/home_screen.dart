@@ -306,17 +306,19 @@ class _HomeTabState extends State<HomeTab> {
                 fit: StackFit.expand,
                 children: [
                   const AutoImageSlider(),
-                  // Gradient overlay
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.black.withOpacity(0.25),
-                          Colors.transparent,
-                          Colors.black.withOpacity(0.7),
-                        ],
+                  // Gradient overlay (wrapped in IgnorePointer so clicks pass through)
+                  IgnorePointer(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.black.withOpacity(0.25),
+                            Colors.transparent,
+                            Colors.black.withOpacity(0.7),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -324,48 +326,50 @@ class _HomeTabState extends State<HomeTab> {
                     left: 20,
                     bottom: 20,
                     right: 20,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: _kAccent,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            langProvider.isBangla ? 'সাগর কন্যা' : 'Daughter of the Sea',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.5,
+                    child: IgnorePointer(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: _kAccent,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              langProvider.isBangla ? 'সাগর কন্যা' : 'Daughter of the Sea',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.5,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          langProvider.translate('app_title'),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 0.3,
-                            shadows: [
-                              Shadow(offset: Offset(0, 2), blurRadius: 6, color: Colors.black54),
-                            ],
+                          const SizedBox(height: 6),
+                          Text(
+                            langProvider.translate('app_title'),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 0.3,
+                              shadows: [
+                                Shadow(offset: Offset(0, 2), blurRadius: 6, color: Colors.black54),
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          langProvider.translate('tagline'),
-                          style: const TextStyle(
-                            color: Colors.white70,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
+                          const SizedBox(height: 2),
+                          Text(
+                            langProvider.translate('tagline'),
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
