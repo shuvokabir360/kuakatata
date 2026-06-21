@@ -747,6 +747,13 @@ ul {
   animation: zoomIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.modal-card form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
 .modal-card-small {
   max-width: 480px;
 }
@@ -952,5 +959,23 @@ ul {
   }
   .overview-layout {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .modal-card {
+    max-height: 95vh;
+    border-radius: var(--radius-sm);
+  }
+  .modal-body {
+    padding: 16px;
+  }
+  .modal-header, .modal-footer {
+    padding: 16px;
   }
 }
