@@ -72,6 +72,302 @@ mongoose
 
 // ==================== API ENDPOINTS ====================
 
+// Root Landing Page
+app.get('/', (req, res) => {
+  res.send(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuakata API Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #070B19 0%, #0F172A 100%);
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary: #0EA5E9;
+            --primary-glow: rgba(14, 165, 233, 0.15);
+            --success: #10B981;
+            --success-glow: rgba(16, 185, 129, 0.2);
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            opacity: 0.15;
+        }
+        body::before {
+            background: var(--primary);
+            top: 10%;
+            left: 10%;
+        }
+        body::after {
+            background: #8B5CF6;
+            bottom: 10%;
+            right: 10%;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-container {
+            margin-bottom: 2rem;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+        }
+
+        .logo-icon {
+            font-size: 3.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #38BDF8, #818CF8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            padding: 0.5rem 1.25rem;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 0 20px var(--success-glow);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 10px var(--success); }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
+
+        .endpoints-title {
+            text-align: left;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            border-left: 4px solid var(--primary);
+            padding-left: 0.75rem;
+        }
+
+        .endpoints-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        @media(min-width: 600px) {
+            .endpoints-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .endpoint-card {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+
+        .endpoint-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.05);
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .method {
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .method.get {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+        }
+
+        .method.post {
+            background: rgba(245, 158, 11, 0.15);
+            color: #F59E0B;
+        }
+
+        .path {
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        footer {
+            margin-top: 3rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 300;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <span class="logo-icon">🌊</span>
+        </div>
+        <h1>Kuakata Travel Guide</h1>
+        <p class="subtitle">Secure REST API Service for Android &amp; iOS App Clients</p>
+        
+        <div class="status-badge">
+            <span class="status-dot"></span>
+            <span>API Server Online &amp; Database Connected</span>
+        </div>
+
+        <h2 class="endpoints-title">Key Endpoints</h2>
+        <div class="endpoints-grid">
+            <a href="/api/health" class="endpoint-card" target="_blank">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/health</span>
+                </div>
+                <p class="desc">Verify system health, DB connection status, and server time.</p>
+            </a>
+            
+            <a href="/api/content/hotel" class="endpoint-card" target="_blank">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/content/hotel</span>
+                </div>
+                <p class="desc">Fetch registered hotels and dynamic resort listings.</p>
+            </a>
+
+            <a href="/api/complaints" class="endpoint-card" target="_blank">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/complaints</span>
+                </div>
+                <p class="desc">View public complaints &amp; traveler feedback boards.</p>
+            </a>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/bookings</span>
+                </div>
+                <p class="desc">Submit hotel room booking or guide reservation requests.</p>
+            </div>
+        </div>
+
+        <footer>
+            Kuakata Travel App Backend Portal &bull; Running on Express Node.js &bull; Port ${PORT}
+        </footer>
+    </div>
+</body>
+</html>
+  `);
+});
+
 // Test API Health
 app.get('/api/health', (req, res) => {
   res.json({
