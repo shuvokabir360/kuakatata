@@ -133,6 +133,10 @@ app.get('/privacy-policy', (req, res) => {
     <h2>Security of Data</h2>
     <p>The security of your data is important to us. We implement industry-standard security measures to protect your information from unauthorized access, alteration, disclosure, or destruction.</p>
 
+    <h2>Data Deletion & Account Removal</h2>
+    <p>We respect your privacy and give you control over your data. You can request the deletion of your account and any associated personal data at any time.</p>
+    <p>To request account or data deletion, please send an email to our support team at <strong>support@kuakatauide.com</strong> with your registered mobile number. We will process your request and delete all your personal information, booking history, and account data from our servers within 7 business days.</p>
+
     <h2>Children's Privacy</h2>
     <p>Our Application does not address anyone under the age of 13. We do not knowingly collect personally identifiable information from children under 13.</p>
 
