@@ -50,6 +50,7 @@ mongoose
     isUsingMongoDB = true;
     // Seed default content if MongoDB database is empty
     seedDefaultContent();
+    seedTestUser();
     // Drop the unique mobile index if it exists to prevent E11000 duplicate key error for empty mobile fields
     mongoose.connection.db.collection('users').dropIndex('mobile_1')
       .then(() => {
@@ -1551,6 +1552,44 @@ function seedInMemoryContent() {
   }
 }
 seedInMemoryContent();
+
+// Seed test user for Google Play Store review
+async function seedTestUser() {
+  try {
+    // 1. Seed in-memory
+    const testUserInMemory = inMemoryUsers.find(u => u.mobile === '01700000000');
+    if (!testUserInMemory) {
+      inMemoryUsers.push({
+        _id: 'mock_user_test',
+        name: 'Test User',
+        mobile: '01700000000',
+        pin: '1234',
+        role: 'user',
+        address: 'Kuakata',
+      });
+      console.log('Seeded in-memory test user: 01700000000 / 1234');
+    }
+
+    // 2. Seed MongoDB
+    if (isUsingMongoDB) {
+      const testUserMongo = await User.findOne({ mobile: '01700000000' });
+      if (!testUserMongo) {
+        const newUser = new User({
+          name: 'Test User',
+          mobile: '01700000000',
+          pin: '1234',
+          role: 'user',
+          address: 'Kuakata',
+        });
+        await newUser.save();
+        console.log('Seeded MongoDB test user: 01700000000 / 1234');
+      }
+    }
+  } catch (error) {
+    console.error('Error seeding test user:', error);
+  }
+}
+seedTestUser();
 
 // Seed MongoDB database with default content once on startup if empty
 async function seedDefaultContent() {
