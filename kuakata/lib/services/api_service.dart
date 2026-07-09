@@ -5,14 +5,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // Default base URL. Real Android device connects to host's localhost via adb reverse.
-  static String _baseUrl = 'https://b26d2e1fe3f244.lhr.life';
+  static String _baseUrl = 'https://kuakata-backend.onrender.com';
 
   static String get baseUrl => _baseUrl;
 
   // Initialize and load saved URL
   static Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
-    _baseUrl = prefs.getString('backend_url') ?? 'https://b26d2e1fe3f244.lhr.life';
+    _baseUrl = prefs.getString('backend_url') ?? 'https://kuakata-backend.onrender.com';
   }
 
   // Update backend url setting

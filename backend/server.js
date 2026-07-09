@@ -72,6 +72,83 @@ mongoose
 
 // ==================== API ENDPOINTS ====================
 
+// Privacy Policy Endpoint (Required for Google Play Store)
+app.get('/privacy-policy', (req, res) => {
+  res.send(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Kuakata App</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            padding: 30px;
+            color: #1e293b;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #0ea5e9;
+            font-size: 2.25rem;
+            margin-bottom: 5px;
+        }
+        h2 {
+            color: #0f172a;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 8px;
+            margin-top: 30px;
+            font-size: 1.5rem;
+        }
+        p {
+            margin: 15px 0;
+        }
+        .footer {
+            margin-top: 40px;
+            font-size: 0.875rem;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Privacy Policy</h1>
+    <p><strong>Last updated:</strong> July 10, 2026</p>
+    <p>This privacy policy governs your use of the software application <strong>Kuakata</strong> ("Application") for mobile devices. The Application is a travel guide, tour support, and hotel/transport booking platform designed to enhance your travel experience in Kuakata, Bangladesh.</p>
+    
+    <h2>Information Collection and Use</h2>
+    <p>We collect several types of information to provide and improve our service to you:</p>
+    <ul>
+        <li><strong>Personal Data:</strong> While using our Application, we may ask you to provide us with certain personally identifiable information, such as your Name, Phone number, and Profile image.</li>
+        <li><strong>Usage Data:</strong> We may collect information about how the Application is accessed and used to help us improve user experience.</li>
+    </ul>
+    
+    <h2>Permissions & Network Requirements</h2>
+    <p>The Application requires <strong>Internet Access</strong> to connect to the backend server to process bookings, load listings (hotels, tour guides, transport, food), and submit complaints or feedback.</p>
+
+    <h2>Security of Data</h2>
+    <p>The security of your data is important to us. We implement industry-standard security measures to protect your information from unauthorized access, alteration, disclosure, or destruction.</p>
+
+    <h2>Children's Privacy</h2>
+    <p>Our Application does not address anyone under the age of 13. We do not knowingly collect personally identifiable information from children under 13.</p>
+
+    <h2>Changes to This Privacy Policy</h2>
+    <p>We may update our Privacy Policy from time to time. You are advised to review this page periodically for any changes.</p>
+
+    <h2>Contact Us</h2>
+    <p>If you have any questions about this Privacy Policy, you can contact us at:</p>
+    <p><strong>Email:</strong> support@kuakatauide.com</p>
+    <div class="footer">
+        <p>&copy; 2026 Kuakata. All rights reserved.</p>
+    </div>
+</body>
+</html>
+  `);
+});
+
 // Root Landing Page
 app.get('/', (req, res) => {
   res.send(`
