@@ -130,6 +130,7 @@ function setupNavigation() {
       if (target === 'view-boards') title = 'Speedboats Directory';
       if (target === 'view-boats') title = 'Boats Directory';
       if (target === 'view-foods') title = 'Restaurants & Food';
+      if (target === 'view-app-preview') title = 'Live App Preview';
       document.getElementById('page-title').textContent = title;
 
       // Switch View
@@ -194,6 +195,7 @@ function refreshViewData(viewId) {
   if (viewId === 'view-boards') loadBoards();
   if (viewId === 'view-boats') loadBoats();
   if (viewId === 'view-foods') loadFoods();
+  if (viewId === 'view-app-preview') loadAppPreview();
 }
 
 // API Loader: Load all app stats and lists
@@ -2026,3 +2028,455 @@ function escapeHtml(str) {
 function jsonEncode(obj) {
   return JSON.stringify(obj);
 }
+
+// ==================== APP PREVIEW FUNCTIONALITY ====================
+let previewInitialized = false;
+let currentPreviewScreen = 'home';
+let currentPreviewLang = 'en';
+
+async function loadAppPreview() {
+  // Ensure we have fresh data
+  const loader = document.getElementById('mock-app-scroll-content');
+  if (loader) loader.innerHTML = '<div class="loading-text">Loading preview data...</div>';
+  
+  await loadAllData();
+  
+  if (!previewInitialized) {
+    setupPreviewControls();
+    previewInitialized = true;
+  }
+  
+  updateMockTime();
+  updateMockScreen();
+}
+
+function updateMockTime() {
+  const now = new Date();
+  let hours = now.getHours();
+  let minutes = now.getMinutes();
+  hours = hours < 10 ? '0' + hours : hours;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  const timeStr = hours + ':' + minutes;
+  const timeEl = document.getElementById('mock-time');
+  if (timeEl) timeEl.textContent = timeStr;
+}
+
+function setupPreviewControls() {
+  // Screen selector buttons
+  const screenBtns = document.querySelectorAll('.screen-sel-btn');
+  screenBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      screenBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentPreviewScreen = btn.getAttribute('data-screen');
+      
+      // Update bottom navigation bar active state
+      const navItems = document.querySelectorAll('.mock-nav-item');
+      navItems.forEach(nav => {
+        if (nav.getAttribute('data-nav') === currentPreviewScreen) {
+          nav.classList.add('active');
+        } else {
+          nav.classList.remove('active');
+        }
+      });
+      
+      updateMockScreen();
+    });
+  });
+  
+  // Language selector buttons
+  const langBtns = document.querySelectorAll('.lang-sel-btn');
+  langBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      langBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentPreviewLang = btn.getAttribute('data-lang');
+      updateMockScreen();
+    });
+  });
+  
+  // Bottom navigation items inside mockup
+  const mockNavItems = document.querySelectorAll('.mock-nav-item');
+  mockNavItems.forEach(nav => {
+    nav.addEventListener('click', () => {
+      const navTarget = nav.getAttribute('data-nav');
+      if (navTarget === 'more') {
+        alert('More options menu screen simulation');
+        return;
+      }
+      
+      currentPreviewScreen = navTarget;
+      
+      // Sync screen selector buttons on the left
+      screenBtns.forEach(btn => {
+        if (btn.getAttribute('data-screen') === navTarget) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      
+      mockNavItems.forEach(n => n.classList.remove('active'));
+      nav.classList.add('active');
+      
+      updateMockScreen();
+    });
+  });
+}
+
+function updateMockScreen() {
+  const screenEl = document.getElementById('mock-app-scroll-content');
+  const headerTitleEl = document.getElementById('mock-header-title-text');
+  if (!screenEl) return;
+  
+  // Clear screen
+  screenEl.innerHTML = '';
+  
+  // Set header title
+  let title = 'Kuakata Travel';
+  if (currentPreviewLang === 'bn') {
+    title = 'কুয়াকাটা গাইড';
+  }
+  
+  if (currentPreviewScreen === 'hotels') {
+    title = currentPreviewLang === 'en' ? 'Hotels' : 'হোটেলসমূহ';
+    renderMockHotels(screenEl, currentPreviewLang);
+  } else if (currentPreviewScreen === 'spots') {
+    title = currentPreviewLang === 'en' ? 'Popular Spots' : 'দর্শনীয় স্থান';
+    renderMockSpots(screenEl, currentPreviewLang);
+  } else if (currentPreviewScreen === 'bikes') {
+    title = currentPreviewLang === 'en' ? 'Bikers' : 'মোটরসাইকেল চালক';
+    renderMockBikes(screenEl, currentPreviewLang);
+  } else if (currentPreviewScreen === 'vans') {
+    title = currentPreviewLang === 'en' ? 'Easy Vans' : 'ইজি ভ্যান চালক';
+    renderMockVans(screenEl, currentPreviewLang);
+  } else if (currentPreviewScreen === 'foods') {
+    title = currentPreviewLang === 'en' ? 'Restaurants' : 'রেস্টুরেন্ট';
+    renderMockFoods(screenEl, currentPreviewLang);
+  } else {
+    // Home screen
+    renderMockHome(screenEl, currentPreviewLang);
+  }
+  
+  if (headerTitleEl) {
+    headerTitleEl.textContent = title;
+  }
+}
+
+function renderMockHome(el, lang) {
+  // 1. Render Banner Image Slider
+  let sliderHtml = '';
+  if (slides && slides.length > 0) {
+    const activeSlide = slides[0];
+    const slideTitle = lang === 'en' ? activeSlide.title_en : activeSlide.title_bn;
+    sliderHtml = `
+      <div class="mock-slider">
+        <img class="mock-slider-img" src="${activeSlide.image || 'https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=400&q=80'}" alt="Slide">
+        <div class="mock-slider-overlay">
+          <h5 class="mock-slider-title">${escapeHtml(slideTitle)}</h5>
+        </div>
+        <div class="mock-slider-dots">
+          ${slides.map((_, i) => `<span class="mock-dot ${i === 0 ? 'active' : ''}"></span>`).join('')}
+        </div>
+      </div>
+    `;
+  } else {
+    sliderHtml = `
+      <div class="mock-slider">
+        <div class="mock-slider-overlay" style="height: 100%; display: flex; align-items: center; justify-content: center; background-color: var(--bg-sidebar);">
+          <h5 class="mock-slider-title" style="text-align: center;">${lang === 'en' ? 'Welcome to Kuakata' : 'কুয়াকাটায় আপনাকে স্বাগতম'}</h5>
+        </div>
+      </div>
+    `;
+  }
+  
+  // 2. Render Quick Grid Category Buttons
+  const gridLabels = {
+    hotels: lang === 'en' ? 'Hotels' : 'হোটেল',
+    spots: lang === 'en' ? 'Spots' : 'দর্শনীয় স্থান',
+    bikes: lang === 'en' ? 'Bikes' : 'মোটরসাইকেল',
+    vans: lang === 'en' ? 'Vans' : 'ইজি ভ্যান',
+    boats: lang === 'en' ? 'Speedboats' : 'স্পিডবোট',
+    foods: lang === 'en' ? 'Food & Cafe' : 'খাবার-দাবার'
+  };
+  
+  const quickGridHtml = `
+    <div class="mock-quick-grid">
+      <div class="mock-quick-card" onclick="simulateScreenSelect('hotels')">
+        <div class="mock-card-icon icon-blue"><span class="material-icons" style="font-size:16px">hotel</span></div>
+        <span>${gridLabels.hotels}</span>
+      </div>
+      <div class="mock-quick-card" onclick="simulateScreenSelect('spots')">
+        <div class="mock-card-icon icon-orange"><span class="material-icons" style="font-size:16px">landscape</span></div>
+        <span>${gridLabels.spots}</span>
+      </div>
+      <div class="mock-quick-card" onclick="simulateScreenSelect('bikes')">
+        <div class="mock-card-icon icon-green"><span class="material-icons" style="font-size:16px">motorcycle</span></div>
+        <span>${gridLabels.bikes}</span>
+      </div>
+      <div class="mock-quick-card" onclick="simulateScreenSelect('vans')">
+        <div class="mock-card-icon icon-purple"><span class="material-icons" style="font-size:16px">electric_car</span></div>
+        <span>${gridLabels.vans}</span>
+      </div>
+      <div class="mock-quick-card" style="opacity: 0.7;">
+        <div class="mock-card-icon icon-amber"><span class="material-icons" style="font-size:16px">directions_boat</span></div>
+        <span>${gridLabels.boats}</span>
+      </div>
+      <div class="mock-quick-card" onclick="simulateScreenSelect('foods')">
+        <div class="mock-card-icon icon-teal"><span class="material-icons" style="font-size:16px">restaurant</span></div>
+        <span>${gridLabels.foods}</span>
+      </div>
+    </div>
+  `;
+  
+  // 3. Render Popular Spots horizontal list
+  let spotsListHtml = '';
+  if (spots && spots.length > 0) {
+    spotsListHtml = `
+      <div class="mock-section-header">
+        <h4>${lang === 'en' ? 'Popular Spots' : 'দর্শনীয় স্থান'}</h4>
+        <span onclick="simulateScreenSelect('spots')">${lang === 'en' ? 'See All' : 'সবগুলো'}</span>
+      </div>
+      <div class="mock-spots-scroll">
+        ${spots.slice(0, 5).map(spot => {
+          const title = lang === 'en' ? spot.title_en : spot.title_bn;
+          return `
+            <div class="mock-spot-card">
+              <img class="mock-spot-img" src="${spot.image || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=120&q=80'}" alt="Spot">
+              <div class="mock-spot-name">${escapeHtml(title)}</div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+  
+  // 4. Featured Hotels
+  let hotelsListHtml = '';
+  if (hotels && hotels.length > 0) {
+    hotelsListHtml = `
+      <div class="mock-section-header">
+        <h4>${lang === 'en' ? 'Featured Hotels' : 'সেরা হোটেলসমূহ'}</h4>
+        <span onclick="simulateScreenSelect('hotels')">${lang === 'en' ? 'See All' : 'সবগুলো'}</span>
+      </div>
+      <div class="mock-hotels-list">
+        ${hotels.slice(0, 3).map(hotel => {
+          const name = lang === 'en' ? hotel.name_en : hotel.name_bn;
+          const distance = lang === 'en' ? hotel.distance_en : hotel.distance_bn;
+          const tags = lang === 'en' ? (hotel.tags_en || '') : (hotel.tags_bn || '');
+          const tagArray = tags.split(',').map(t => t.trim()).filter(t => t).slice(0, 2);
+          
+          return `
+            <div class="mock-hotel-card">
+              <img class="mock-hotel-img" src="${hotel.image || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=100&q=80'}" alt="Hotel">
+              <div class="mock-hotel-info">
+                <div>
+                  <div class="mock-hotel-title">${escapeHtml(name)}</div>
+                  <div class="mock-hotel-sub">
+                    <span class="material-icons">place</span>
+                    <span>${escapeHtml(distance)}</span>
+                  </div>
+                </div>
+                <div class="mock-hotel-tags">
+                  ${tagArray.map(t => `<span class="mock-hotel-tag">${escapeHtml(t)}</span>`).join('')}
+                </div>
+                <div class="mock-hotel-footer">
+                  <span class="mock-hotel-price">${escapeHtml(hotel.price_range)}</span>
+                  <button class="mock-hotel-btn">${lang === 'en' ? 'Details' : 'বিস্তারিত'}</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+  
+  el.innerHTML = sliderHtml + quickGridHtml + spotsListHtml + hotelsListHtml;
+}
+
+function renderMockHotels(el, lang) {
+  if (!hotels || hotels.length === 0) {
+    renderMockEmpty(el, lang, 'hotel', lang === 'en' ? 'No hotels listed in database.' : 'ডাটাবেজে কোনো হোটেল পাওয়া যায়নি।');
+    return;
+  }
+  
+  const listHtml = hotels.map(hotel => {
+    const name = lang === 'en' ? hotel.name_en : hotel.name_bn;
+    const distance = lang === 'en' ? hotel.distance_en : hotel.distance_bn;
+    const tags = lang === 'en' ? (hotel.tags_en || '') : (hotel.tags_bn || '');
+    const tagArray = tags.split(',').map(t => t.trim()).filter(t => t).slice(0, 3);
+    
+    return `
+      <div class="mock-hotel-card">
+        <img class="mock-hotel-img" src="${hotel.image || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=100&q=80'}" alt="Hotel">
+        <div class="mock-hotel-info">
+          <div>
+            <div class="mock-hotel-title">${escapeHtml(name)}</div>
+            <div class="mock-hotel-sub">
+              <span class="material-icons">place</span>
+              <span>${escapeHtml(distance)}</span>
+            </div>
+            <div class="mock-hotel-tags">
+              ${tagArray.map(t => `<span class="mock-hotel-tag">${escapeHtml(t)}</span>`).join('')}
+            </div>
+          </div>
+          <div class="mock-hotel-footer">
+            <span class="mock-hotel-price">${escapeHtml(hotel.price_range)}</span>
+            <button class="mock-hotel-btn">${lang === 'en' ? 'Book' : 'বুক করুন'}</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  el.innerHTML = `<div class="mock-hotels-list">${listHtml}</div>`;
+}
+
+function renderMockSpots(el, lang) {
+  if (!spots || spots.length === 0) {
+    renderMockEmpty(el, lang, 'landscape', lang === 'en' ? 'No popular spots listed.' : 'কোনো দর্শনীয় স্থান খুঁজে পাওয়া যায়নি।');
+    return;
+  }
+  
+  const listHtml = spots.map(spot => {
+    const title = lang === 'en' ? spot.title_en : spot.title_bn;
+    const desc = lang === 'en' ? spot.desc_en : spot.desc_bn;
+    
+    return `
+      <div class="mock-hotel-card">
+        <img class="mock-hotel-img" src="${spot.image || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=100&q=80'}" alt="Spot">
+        <div class="mock-hotel-info">
+          <div>
+            <div class="mock-hotel-title">${escapeHtml(title)}</div>
+            <p style="font-size: 8px; color: var(--text-sub); margin-top: 4px; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+              ${escapeHtml(desc)}
+            </p>
+          </div>
+          <div class="mock-hotel-footer" style="margin-top: 4px;">
+            <span style="font-size: 7.5px; color: var(--text-sub); font-weight: 500;">
+              🕒 ${escapeHtml(lang === 'en' ? spot.timings_en : spot.timings_bn)}
+            </span>
+            <button class="mock-hotel-btn">${lang === 'en' ? 'Explore' : 'ভ্রমণ নির্দেশিকা'}</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  el.innerHTML = `<div class="mock-hotels-list">${listHtml}</div>`;
+}
+
+function renderMockBikes(el, lang) {
+  if (!bikes || bikes.length === 0) {
+    renderMockEmpty(el, lang, 'motorcycle', lang === 'en' ? 'No bikers registered.' : 'কোনো মোটরসাইকেল চালক নিবন্ধিত নেই।');
+    return;
+  }
+  
+  const listHtml = bikes.map(bike => {
+    const name = lang === 'en' ? bike.name_en : bike.name_bn;
+    const model = lang === 'en' ? bike.model_en : bike.model_bn;
+    const exp = lang === 'en' ? (bike.exp_en || '3+ years experience') : (bike.exp_bn || '৩+ বছরের অভিজ্ঞতা');
+    
+    return `
+      <div class="mock-service-card">
+        <img class="mock-service-avatar" src="${bike.image || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80'}" alt="Biker">
+        <div class="mock-service-details">
+          <div class="mock-service-name">${escapeHtml(name)}</div>
+          <div class="mock-service-desc">${escapeHtml(model)}</div>
+          <div style="font-size:7.5px; color:var(--text-sub); margin-top:1px;">${escapeHtml(exp)}</div>
+          <div class="mock-service-rating">
+            <span class="material-icons">star</span>
+            <span>${bike.rating || '4.8'}</span>
+            <span>(${bike.rides || '100+'} ${lang === 'en' ? 'rides' : 'রাইড'})</span>
+          </div>
+        </div>
+        <button class="mock-service-call"><span class="material-icons">phone</span></button>
+      </div>
+    `;
+  }).join('');
+  
+  el.innerHTML = `<div class="mock-services-list">${listHtml}</div>`;
+}
+
+function renderMockVans(el, lang) {
+  if (!vans || vans.length === 0) {
+    renderMockEmpty(el, lang, 'electric_car', lang === 'en' ? 'No easy vans registered.' : 'কোনো ইজি ভ্যান নিবন্ধিত নেই।');
+    return;
+  }
+  
+  const listHtml = vans.map(van => {
+    const name = lang === 'en' ? van.name_en : van.name_bn;
+    const model = lang === 'en' ? van.model_en : van.model_bn;
+    const details = lang === 'en' ? (van.details_en || 'Reliable local transit') : (van.details_bn || 'নির্ভরযোগ্য স্থানীয় যাতায়াত');
+    
+    return `
+      <div class="mock-service-card">
+        <img class="mock-service-avatar" src="${van.image || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=80&q=80'}" alt="Driver">
+        <div class="mock-service-details">
+          <div class="mock-service-name">${escapeHtml(name)}</div>
+          <div class="mock-service-desc">${escapeHtml(model)}</div>
+          <div style="font-size:7.5px; color:var(--text-sub); margin-top:1px;">${escapeHtml(details)}</div>
+          <div class="mock-service-rating">
+            <span class="material-icons">star</span>
+            <span>${van.rating || '4.7'}</span>
+            <span>(${van.trips || '50+'} ${lang === 'en' ? 'trips' : 'ভ্রমণ'})</span>
+          </div>
+        </div>
+        <button class="mock-service-call"><span class="material-icons">phone</span></button>
+      </div>
+    `;
+  }).join('');
+  
+  el.innerHTML = `<div class="mock-services-list">${listHtml}</div>`;
+}
+
+function renderMockFoods(el, lang) {
+  if (!foods || foods.length === 0) {
+    renderMockEmpty(el, lang, 'restaurant', lang === 'en' ? 'No restaurants listed.' : 'কোনো রেস্টুরেন্ট পাওয়া যায়নি।');
+    return;
+  }
+  
+  const listHtml = foods.map(food => {
+    const name = lang === 'en' ? food.name_en : food.name_bn;
+    const menuLabel = lang === 'en' ? 'View Menu' : 'মেনু দেখুন';
+    const count = food.menu ? food.menu.length : 0;
+    const itemText = lang === 'en' ? `${count} items` : `${count}টি খাবার`;
+    
+    return `
+      <div class="mock-restaurant-card">
+        <img class="mock-restaurant-img" src="${food.image || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=200&q=80'}" alt="Restaurant">
+        <div class="mock-restaurant-body">
+          <div class="mock-restaurant-title">${escapeHtml(name)}</div>
+          <div class="mock-restaurant-addr">
+            <span class="material-icons">place</span>
+            <span>${escapeHtml(food.address)}</span>
+          </div>
+          <div class="mock-restaurant-footer">
+            <span class="mock-restaurant-badge">${itemText}</span>
+            <button class="mock-restaurant-menu-btn">${menuLabel}</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  el.innerHTML = listHtml;
+}
+
+function renderMockEmpty(el, lang, icon, msg) {
+  el.innerHTML = `
+    <div class="mock-empty-state">
+      <span class="material-icons">${icon}</span>
+      <p>${msg}</p>
+    </div>
+  `;
+}
+
+// Helper function for grids to select screens inside mock
+window.simulateScreenSelect = function(screenName) {
+  const screenBtn = document.querySelector(`.screen-sel-btn[data-screen="${screenName}"]`);
+  if (screenBtn) {
+    screenBtn.click();
+  }
+};

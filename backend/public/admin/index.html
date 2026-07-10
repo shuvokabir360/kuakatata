@@ -126,6 +126,12 @@
               <span>Restaurants & Food</span>
             </a>
           </li>
+          <li>
+            <a href="#" class="nav-item" data-target="view-app-preview">
+              <span class="material-icons">phone_android</span>
+              <span>App Preview</span>
+            </a>
+          </li>
         </ul>
       </nav>
       <div class="sidebar-footer">
@@ -544,6 +550,104 @@
                   <!-- Dynamic content -->
                 </tbody>
               </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- View: App Preview -->
+        <section id="view-app-preview" class="content-view hidden">
+          <div class="preview-layout">
+            <!-- Left Panel: Controls -->
+            <div class="preview-controls-panel">
+              <h3>Preview Controls</h3>
+              <p class="control-help">Select a screen and language to view a live simulated rendering of your mobile app using the latest database content.</p>
+              
+              <div class="control-group">
+                <label>Select Screen</label>
+                <div class="screen-selector-list">
+                  <button class="screen-sel-btn active" data-screen="home">
+                    <span class="material-icons">home</span> Home Screen
+                  </button>
+                  <button class="screen-sel-btn" data-screen="hotels">
+                    <span class="material-icons">hotel</span> Hotels Directory
+                  </button>
+                  <button class="screen-sel-btn" data-screen="spots">
+                    <span class="material-icons">landscape</span> Popular Spots
+                  </button>
+                  <button class="screen-sel-btn" data-screen="bikes">
+                    <span class="material-icons">motorcycle</span> Bikes Directory
+                  </button>
+                  <button class="screen-sel-btn" data-screen="vans">
+                    <span class="material-icons">electric_car</span> Vans Directory
+                  </button>
+                  <button class="screen-sel-btn" data-screen="foods">
+                    <span class="material-icons">restaurant</span> Restaurants &amp; Food
+                  </button>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label>App Language</label>
+                <div class="lang-selector-toggle">
+                  <button class="lang-sel-btn active" data-lang="en">English</button>
+                  <button class="lang-sel-btn" data-lang="bn">বাংলা (Bangla)</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Panel: Smartphone -->
+            <div class="preview-phone-container">
+              <div class="smartphone-frame">
+                <!-- Speaker Notch -->
+                <div class="smartphone-notch"></div>
+                
+                <!-- Phone Screen -->
+                <div class="smartphone-screen" id="mock-app-screen">
+                  
+                  <!-- Mock Status Bar -->
+                  <div class="mock-status-bar">
+                    <span class="mock-status-time" id="mock-time">07:42</span>
+                    <div class="mock-status-icons">
+                      <span class="material-icons mock-status-icon">signal_cellular_4_bar</span>
+                      <span class="material-icons mock-status-icon">wifi</span>
+                      <span class="material-icons mock-status-icon">battery_full</span>
+                    </div>
+                  </div>
+                  
+                  <!-- Mock App Header -->
+                  <div class="mock-app-header">
+                    <button class="mock-header-btn"><span class="material-icons">menu</span></button>
+                    <span class="mock-header-title" id="mock-header-title-text">Kuakata Travel Guide</span>
+                    <button class="mock-header-btn"><span class="material-icons">notifications</span></button>
+                  </div>
+                  
+                  <!-- Mock App Content Area (Scrollable) -->
+                  <div class="mock-app-content" id="mock-app-scroll-content">
+                    <!-- Dynamic rendering happens here -->
+                  </div>
+
+                  <!-- Mock Bottom Nav Bar -->
+                  <div class="mock-bottom-nav">
+                    <button class="mock-nav-item active" data-nav="home">
+                      <span class="material-icons">home</span>
+                      <span class="mock-nav-label">Home</span>
+                    </button>
+                    <button class="mock-nav-item" data-nav="hotels">
+                      <span class="material-icons">hotel</span>
+                      <span class="mock-nav-label">Hotels</span>
+                    </button>
+                    <button class="mock-nav-item" data-nav="spots">
+                      <span class="material-icons">landscape</span>
+                      <span class="mock-nav-label">Spots</span>
+                    </button>
+                    <button class="mock-nav-item" data-nav="more">
+                      <span class="material-icons">more_horiz</span>
+                      <span class="mock-nav-label">More</span>
+                    </button>
+                  </div>
+
+                </div>
+              </div>
             </div>
           </div>
         </section>
