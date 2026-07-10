@@ -391,6 +391,31 @@ app.get('/', (req, res) => {
             font-size: 0.85rem;
             font-weight: 300;
         }
+
+        .admin-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%);
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 2.5rem;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+            cursor: pointer;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.5);
+            background: linear-gradient(135deg, #38BDF8 0%, #3B82F6 100%);
+        }
     </style>
 </head>
 <body>
@@ -440,6 +465,10 @@ app.get('/', (req, res) => {
                 <p class="desc">Submit hotel room booking or guide reservation requests.</p>
             </div>
         </div>
+
+        <a href="/admin/" class="admin-btn">
+            🔑 Admin Login
+        </a>
 
         <footer>
             Kuakata Travel App Backend Portal &bull; Running on Express Node.js &bull; Port ${PORT}
