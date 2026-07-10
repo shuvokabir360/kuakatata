@@ -40,7 +40,7 @@ const inMemoryReviews = [];
 const inMemoryComplaints = [];
 
 // Connect to MongoDB
-const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/kuakata';
+const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://kuakata_admin:01747729757%40Sk@kuakatacluster.t4xlvyq.mongodb.net/kuakata?appName=KuakataCluster&retryWrites=true&w=majority';
 console.log(`Connecting to MongoDB at: ${mongoURI}`);
 
 mongoose
